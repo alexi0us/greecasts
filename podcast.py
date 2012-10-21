@@ -4,11 +4,21 @@ from glob import iglob
 import shutil
 import sys
 import os
+import rss_gen
+import ConfigParser
 
-now = datetime.datetime.now()
-base_url='http://www.real.gr/'
-url_chatz="http://www.real.gr/DefaultArthro.aspx?Page=category&catID=64"
-dropbox_dir = '/Users/koussou/Dropbox/podcasts/chatzinikolaou/'
+def config_section_map(section):
+    dict1 = {}
+    options = config.options(section)
+    for option in options:
+        try:
+            dict1[option] = config.get(section, option)
+            if dict1[option] == -1:
+                DebugPrint("skip: %s" % option)
+        except:
+            print("exception on %s!" % option)
+            dict1[option] = None
+    return dict1
 
 def ensure_directory_structure():
 	if not os.path.exists('tmp'):
@@ -39,9 +49,9 @@ def download_file(url,file_name):
 def find_actual_download_url(html_lines):
 	download_page = 'empty'
 	for line in html_lines:
-		if now.strftime("%d/%m/%Y") in line or "16/10/2012" in line:
+		if now.strftime("%d/%m/%Y") in line or "19/10/2012" in line:
 			print now.strftime("%d-%m-%Y")
-			print "Found in : " +line
+			# print "Found in : " +line
 			process_a = line.split('href=\"')
 			for link in process_a:
 				if link.startswith("DefaultArthro"):
@@ -78,8 +88,19 @@ def concat_files_and_move(name):
 		print filename
 		shutil.copyfileobj(open(filename, 'rb'), destination)
 	destination.close()
-	shutil.copyfile(path_complete_audio_file , dropbox_dir + complete_audio_file)
-	
+	shutil.copyfile(path_complete_audio_file , dropbox_dir + "audio/"+ complete_audio_file)
+
+now = datetime.datetime.now()
+config = ConfigParser.ConfigParser()
+config.read("pod.conf")
+
+base_url = config_section_map("chatzinikolaou")['base_url']
+url_chatz = config_section_map("chatzinikolaou")['url_chatz']
+dropbox_dir = config_section_map("chatzinikolaou")['dropbox_dir_chatz']
+
+# base_url='http://www.real.gr/'
+# url_chatz="http://www.real.gr/DefaultArthro.aspx?Page=category&catID=64"
+# dropbox_dir = '/Users/koussou/Dropbox-pod/Dropbox/Apps/Pancake.io/greecast/chatzinikolaou/'	
 	
 ensure_directory_structure()
 main_page_html = get_html_and_split_lines(url_chatz)
@@ -87,4 +108,5 @@ chatz_download_url = find_actual_download_url(main_page_html)
 download_page_html = get_html_and_split_lines(chatz_download_url)
 download_all_available_files(download_page_html)
 concat_files_and_move("chatzinikolaou")
-
+rssgen = rss_gen.RssGenerator()
+rssgen.createxml()
