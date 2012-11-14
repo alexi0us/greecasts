@@ -8,11 +8,11 @@ import urllib2
 
 
 
-
 class common_functions:
 	
 	def get_html_and_split_lines(self,url):
-		url_content = urllib2.urlopen(url)
+		req = urllib2.Request(url, headers={'User-Agent' : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17"}) 
+		url_content = urllib2.urlopen(req)
 		raw_html = url_content.read()
 		html_lines = raw_html.split('\n')
 		return html_lines
