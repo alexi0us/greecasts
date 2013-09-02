@@ -11,7 +11,6 @@ class chatzinikolaou_functions:
 	cmn = common.common_functions()
 	now = datetime.datetime.now()
 	base_url = cmn.config_section_map("chatzinikolaou")['base_url']
-	dropbox_dir = cmn.config_section_map("chatzinikolaou")['dropbox_dir_chatz']
 	
 	
 	def ensure_directory_structure(self):
@@ -26,7 +25,7 @@ class chatzinikolaou_functions:
 			if "mp3" in line and "audiofile" in line:
 				url_proc = line.split("\"")
 				url = url_proc[3]
-				print url_proc
+				#print url_proc
 				filename = url_proc[0][:-11].decode('utf-8')
 				filename = filename[11:].replace(' ', '') + ".mp3"
 				self.cmn.download_file(url,filename)
@@ -44,7 +43,7 @@ class chatzinikolaou_functions:
 						download_page = process_c[0]
 						podtitle = process_c[1][:-10].decode('utf-8')
 		if download_page == 'empty':
-			print "No pod cast found for: "	+ self.now.strftime("%d/%m/%Y")
+			print "No podcast found for: "	+ self.now.strftime("%d/%m/%Y")
 			print "Exiting..."
 			sys.exit()
 		else:			
@@ -55,8 +54,15 @@ class chatzinikolaou_functions:
 		complete_audio_file = name + '_' + self.now.strftime("%d%m%Y")+'.mp3'
 		path_complete_audio_file = os.getcwd() + '/'+ name +'/' + complete_audio_file
 		destination = open(path_complete_audio_file , 'wb')
-		for filename in iglob(os.path.join(os.getcwd() + '/tmp/', '*.mp3')):
-			print filename
+		for filename in sorted(iglob(os.path.join(os.getcwd() + '/tmp/', '*.mp3'))):
+			file_concat = filename.split("/")
+			print file_concat[-1]
 			shutil.copyfileobj(open(filename, 'rb'), destination)
 		destination.close()
-	       #shutil.copyfile(path_complete_audio_file , self.dropbox_dir + "audio/"+ complete_audio_file)
+		#Remove tmp files
+		for filename in sorted(iglob(os.path.join(os.getcwd() + '/tmp/', '*.mp3'))):
+			try:
+				os.remove(filename)
+			except OSError:
+				pass
+

@@ -1,22 +1,25 @@
+# -*- coding: utf-8 -*-
 # import libraries
 import os
 import sys
 import datetime
 import time
+import common
 import shutil
-
-dropbox_dir = '/Users/koussou/Dropbox-pod/Dropbox/Apps/Pancake.io/greecast/chatzinikolaou/'
+import datetime
 
 
 # import constants from stat library
 from stat import * # ST_SIZE ST_MTIME
 
 class RssGenerator:
+	now = datetime.datetime.now()
+	cmn = common.common_functions()
+	base_directory = cmn.config_section_map("home")['base_dir']
 
 	# format date method
 	def formatDate(self,dt):
 	    return dt.strftime("%a, %d %b %Y %H:%M:%S +0000")
-
 
 	# get the item/@type based on file extension
 	def getItemType(self,fileExtension):
@@ -29,29 +32,35 @@ class RssGenerator:
 	    return mediaType
 
 
-	def createxml(self):
-
-		rssTitle = "Realfm - Nikos Chatzinikolaou"
-		rssDescription = "OI kathimerines ekpompes tou Nikou Chatzinikolaou sto RealFm"
-		# the url where the podcast items will be hosted
-		rssSiteURL = "https://www.real.gr"
-		# the url of the folder where the items will be stored
-		rssItemURL = "http://ec2-54-217-81-147.eu-west-1.compute.amazonaws.com/chatzinikolaou"
-		# the url to the podcast html file
-		rssLink = rssSiteURL + "rss/chatzinikolaou.xml"
-		# url to the podcast image
-		rssImageUrl = "http://www.real.gr/files/New%20folder%20(1)/xatzinikolaou_button.jpg"
-		# the time to live (in minutes)
-		rssTtl = "60"
-		# contact details of the web master
-		rssWebMaster = "greecast@ymail"
-		#record datetime started
-		now = datetime.datetime.now()
+	def createxml(self, name):
+		
+		if name == 'chatzinikolaou':
+		    rssTitle_tmp = u'Realfm - Νίκος Χατζηνικολάου'
+		    rssTitle=rssTitle_tmp.encode('utf-8')
+		    rssDescription = 'Οι καθημερινές εκπομπές του Ν.Χατζηνικολάου στον realfm'
+		    # the url where the podcast items will be hosted
+		    rssSiteURL = "https://www.real.gr"
+		    # the url of the folder where the items will be stored
+		    rssItemURL = "http://ec2-54-217-81-147.eu-west-1.compute.amazonaws.com/chatzinikolaou"
+		    # the url to the podcast html file
+		    rssLink = rssSiteURL + "DefaultArthro.aspx?Page=category&catID=64"
+		    # url to the podcast image
+		    rssImageUrl = "http://www.real.gr/Files/Articles/Photo/250_140_5128.jpg"
+		    # the time to live (in minutes)
+		    rssTtl = "60"
+		    # contact details of the web master
+		    rssWebMaster = "greecast@ymail.com"
+		    #record datetime started
+		    now = datetime.datetime.now()
+		    rootdir = self.base_directory + "chatzinikolaou"
+		    outputFilename = self.base_directory + "chatzinikolaou/chatzinikolaou.xml"
+ 		else:
+ 			print "An error occured. No xml feed was created"
 		
 		
-		rootdir = "/home/ubuntu/greecasts/chatzinikolaou"
 		
-		outputFilename = "/home/ubuntu/greecasts/chatzinikolaou/chatzinikolaou.xml"
+		
+		
 		# open rss file
 		outputFile = open(outputFilename, "w")
 
@@ -86,18 +95,18 @@ class RssGenerator:
 		            # find the path relative to the starting folder, e.g. /subFolder/file
 		            relativePath = fullPath[len(rootdir):]
 
-
 		            # write rss item
 		            outputFile.write("<item>\n")
-		            outputFile.write("<title>" + fileNameBits[0].replace("_", " ") + "</title>\n")
-		            outputFile.write("<description>A description</description>\n")
+		            outputFile.write("<title>" + fileNameBits[0][17:19] \
+		            	+ "/" + fileNameBits[0][19:21]\
+						+ "/" + fileNameBits[0][21:23]
+		            	+ " Η εκπομπή του Νίκου Χατζηνικολάου"+ "</title>\n")
+		            outputFile.write("<description>" +"Νίκος Χατζηνικολάου"+"</description>\n")
 		            outputFile.write("<link>" + rssItemURL + relativePath + "</link>\n")
 		            outputFile.write("<guid>" + rssItemURL + relativePath + "</guid>\n")
 		            outputFile.write("<pubDate>" + self.formatDate(datetime.datetime.fromtimestamp(fileStat[ST_MTIME])) + "</pubDate>\n")
 		            outputFile.write("<enclosure url=\"" + rssItemURL + relativePath + "\" length=\"" + str(fileStat[ST_SIZE]) + "\" type=\"" + self.getItemType(fileNameBits[len(fileNameBits)-1]) + "\" />\n")
 		            outputFile.write("</item>\n")
-
-
         
 		# write rss footer
 		outputFile.write("</channel>\n")

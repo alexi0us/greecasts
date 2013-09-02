@@ -17,7 +17,7 @@ download_page_html = cmn.get_html_and_split_lines(chatz_download_url)
 chatz.download_all_available_files(download_page_html)
 chatz.concat_files_and_move("chatzinikolaou")
 rssgen = rss_gen.RssGenerator()
-rssgen.createxml()
+rssgen.createxml("chatzinikolaou")
 
 # url_download_mega = "http://www.megatv.com/megagegonota/summary.asp?catid=27377&subid=2&pubid=29981910"
 # mega_download_page_html = cmn.get_html_and_split_lines(url_download_mega)
