@@ -26,6 +26,7 @@ class chatzinikolaou_functions:
 			if "mp3" in line and "audiofile" in line:
 				url_proc = line.split("\"")
 				url = url_proc[3]
+				print url_proc
 				filename = url_proc[0][:-11].decode('utf-8')
 				filename = filename[11:].replace(' ', '') + ".mp3"
 				self.cmn.download_file(url,filename)
@@ -33,7 +34,7 @@ class chatzinikolaou_functions:
 	def find_actual_download_url(self,html_lines):
 		download_page = 'empty'
 		for line in html_lines:
-			if self.now.strftime("%d/%m/%Y") in line or "9/11/2012" in line:
+			if self.now.strftime("%d/%m/%Y") in line or "02/09/2012" in line:
 				print self.now.strftime("%d-%m-%Y")
 				# print "Found in : " +line
 				process_a = line.split('href=\"')
@@ -58,4 +59,4 @@ class chatzinikolaou_functions:
 			print filename
 			shutil.copyfileobj(open(filename, 'rb'), destination)
 		destination.close()
-		shutil.copyfile(path_complete_audio_file , self.dropbox_dir + "audio/"+ complete_audio_file)
+	       #shutil.copyfile(path_complete_audio_file , self.dropbox_dir + "audio/"+ complete_audio_file)

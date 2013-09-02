@@ -36,7 +36,7 @@ class RssGenerator:
 		# the url where the podcast items will be hosted
 		rssSiteURL = "https://www.real.gr"
 		# the url of the folder where the items will be stored
-		rssItemURL = "http://pancake.io/58b8be/greecast"
+		rssItemURL = "http://ec2-54-217-81-147.eu-west-1.compute.amazonaws.com/chatzinikolaou"
 		# the url to the podcast html file
 		rssLink = rssSiteURL + "rss/chatzinikolaou.xml"
 		# url to the podcast image
@@ -49,9 +49,9 @@ class RssGenerator:
 		now = datetime.datetime.now()
 		
 		
-		rootdir = "/Users/koussou/Development/podcast/chatzinikolaou"
+		rootdir = "/home/ubuntu/greecasts/chatzinikolaou"
 		
-		outputFilename = "/Users/koussou/Development/podcast/chatzinikolaou/chatzinikolaou.xml"
+		outputFilename = "/home/ubuntu/greecasts/chatzinikolaou/chatzinikolaou.xml"
 		# open rss file
 		outputFile = open(outputFilename, "w")
 
@@ -78,23 +78,24 @@ class RssGenerator:
  
 		        # split the file based on "." we use the first part as the title and the extension to work out the media type
 		        fileNameBits = file.split(".")
-		        # get the full path of the file
-		        fullPath = os.path.join(path, file)
-		        # get the stats for the file
-		        fileStat = os.stat(fullPath)
-		        # find the path relative to the starting folder, e.g. /subFolder/file
-		        relativePath = fullPath[len(rootdir):]
+			if fileNameBits[1] != "xml":
+		            # get the full path of the file
+		            fullPath = os.path.join(path, file)
+		            # get the stats for the file
+		            fileStat = os.stat(fullPath)
+		            # find the path relative to the starting folder, e.g. /subFolder/file
+		            relativePath = fullPath[len(rootdir):]
 
 
-		        # write rss item
-		        outputFile.write("<item>\n")
-		        outputFile.write("<title>" + fileNameBits[0].replace("_", " ") + "</title>\n")
-		        outputFile.write("<description>A description</description>\n")
-		        outputFile.write("<link>" + rssItemURL + relativePath + "</link>\n")
-		        outputFile.write("<guid>" + rssItemURL + relativePath + "</guid>\n")
-		        outputFile.write("<pubDate>" + self.formatDate(datetime.datetime.fromtimestamp(fileStat[ST_MTIME])) + "</pubDate>\n")
-		        outputFile.write("<enclosure url=\"" + rssItemURL + "/audio"+ relativePath + "\" length=\"" + str(fileStat[ST_SIZE]) + "\" type=\"" + self.getItemType(fileNameBits[len(fileNameBits)-1]) + "\" />\n")
-		        outputFile.write("</item>\n")
+		            # write rss item
+		            outputFile.write("<item>\n")
+		            outputFile.write("<title>" + fileNameBits[0].replace("_", " ") + "</title>\n")
+		            outputFile.write("<description>A description</description>\n")
+		            outputFile.write("<link>" + rssItemURL + relativePath + "</link>\n")
+		            outputFile.write("<guid>" + rssItemURL + relativePath + "</guid>\n")
+		            outputFile.write("<pubDate>" + self.formatDate(datetime.datetime.fromtimestamp(fileStat[ST_MTIME])) + "</pubDate>\n")
+		            outputFile.write("<enclosure url=\"" + rssItemURL + relativePath + "\" length=\"" + str(fileStat[ST_SIZE]) + "\" type=\"" + self.getItemType(fileNameBits[len(fileNameBits)-1]) + "\" />\n")
+		            outputFile.write("</item>\n")
 
 
         
@@ -102,7 +103,7 @@ class RssGenerator:
 		outputFile.write("</channel>\n")
 		outputFile.write("</rss>")
 		outputFile.close()
-		shutil.copyfile(outputFilename , dropbox_dir + "chatzinikolaou.xml")
+		shutil.copyfile(outputFilename , "chatzinikolaou.xml")
 		print "complete"
 
 
