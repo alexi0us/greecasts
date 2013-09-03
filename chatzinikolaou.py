@@ -11,7 +11,7 @@ class chatzinikolaou_functions:
 	cmn = common.common_functions()
 	now = datetime.datetime.now()
 	base_url = cmn.config_section_map("chatzinikolaou")['base_url']
-	
+	base_directory = cmn.config_section_map("home")['base_dir']
 	
 	def ensure_directory_structure(self):
 		if not os.path.exists('tmp'):
@@ -33,7 +33,7 @@ class chatzinikolaou_functions:
 	def find_actual_download_url(self,html_lines):
 		download_page = 'empty'
 		for line in html_lines:
-			if self.now.strftime("%d/%m/%Y") in line or "02/09/2012" in line:
+			if self.now.strftime("%d/%m/%Y") in line or "02/09/2013" in line:
 				print self.now.strftime("%d-%m-%Y")
 				# print "Found in : " +line
 				process_a = line.split('href=\"')
@@ -66,3 +66,12 @@ class chatzinikolaou_functions:
 			except OSError:
 				pass
 
+        def chatz_is_file_downloaded(self):
+		flag = False
+		complete_audio_file = "chatzinikolaou" + '_' + self.now.strftime("%d%m%Y")+'.mp3'
+		rootdir = self.base_directory + "chatzinikolaou"
+		for path, subFolders, files in os.walk(rootdir):
+			for file in files:
+				if file == complete_audio_file:
+					flag = True
+                return flag

@@ -7,7 +7,7 @@ import time
 import common
 import shutil
 import datetime
-
+from mutagen.mp3 import MP3
 
 # import constants from stat library
 from stat import * # ST_SIZE ST_MTIME
@@ -43,7 +43,7 @@ class RssGenerator:
 		    # the url of the folder where the items will be stored
 		    rssItemURL = "http://ec2-54-217-81-147.eu-west-1.compute.amazonaws.com/chatzinikolaou"
 		    # the url to the podcast html file
-		    rssLink = rssSiteURL + "DefaultArthro.aspx?Page=category&catID=64"
+		    rssLink = rssSiteURL + '/DefaultArthro.aspx?Page=category&amp;catID=64'
 		    # url to the podcast image
 		    rssImageUrl = "http://www.real.gr/Files/Articles/Photo/250_140_5128.jpg"
 		    # the time to live (in minutes)
@@ -59,7 +59,7 @@ class RssGenerator:
 		
 		
 		
-		
+		print outputFilename
 		
 		# open rss file
 		outputFile = open(outputFilename, "w")
@@ -94,25 +94,30 @@ class RssGenerator:
 		            fileStat = os.stat(fullPath)
 		            # find the path relative to the starting folder, e.g. /subFolder/file
 		            relativePath = fullPath[len(rootdir):]
+			    audio = MP3(fullPath)
+			    duration = datetime.timedelta(seconds=audio.info.length)
+			    audio_length = ':'.join(str(duration).split(':')[:2])
+			    print audio_length
 
 		            # write rss item
 		            outputFile.write("<item>\n")
-		            outputFile.write("<title>" + fileNameBits[0][17:19] \
-		            	+ "/" + fileNameBits[0][19:21]\
+		            outputFile.write("<title>" + fileNameBits[0][15:17] \
+		            	+ "/" + fileNameBits[0][17:19]\
 						+ "/" + fileNameBits[0][21:23]
 		            	+ " Η εκπομπή του Νίκου Χατζηνικολάου"+ "</title>\n")
 		            outputFile.write("<description>" +"Νίκος Χατζηνικολάου"+"</description>\n")
 		            outputFile.write("<link>" + rssItemURL + relativePath + "</link>\n")
 		            outputFile.write("<guid>" + rssItemURL + relativePath + "</guid>\n")
 		            outputFile.write("<pubDate>" + self.formatDate(datetime.datetime.fromtimestamp(fileStat[ST_MTIME])) + "</pubDate>\n")
-		            outputFile.write("<enclosure url=\"" + rssItemURL + relativePath + "\" length=\"" + str(fileStat[ST_SIZE]) + "\" type=\"" + self.getItemType(fileNameBits[len(fileNameBits)-1]) + "\" />\n")
+			    outputFile.write("<duration>" + audio_length + "</duration>\n")
+			    outputFile.write("<enclosure url=\"" + rssItemURL + relativePath + "\" length=\"" + str(fileStat[ST_SIZE]) + "\" type=\"" + self.getItemType(fileNameBits[len(fileNameBits)-1]) + "\" />\n")
 		            outputFile.write("</item>\n")
         
 		# write rss footer
 		outputFile.write("</channel>\n")
 		outputFile.write("</rss>")
 		outputFile.close()
-		shutil.copyfile(outputFilename , "chatzinikolaou.xml")
+		#shutil.copyfile(outputFilename , "chatzinikolaou.xml")
 		print "complete"
 
 
