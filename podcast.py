@@ -1,10 +1,12 @@
+#!/usr/bin/env python
+
 import rss_gen
 import ConfigParser
 import common
 import chatzinikolaou
 import logging
 
-logging.basicConfig(filename='podcast.log', format='%(asctime)s %(message)s', filemode='w', level=logging.DEBUG)
+logging.basicConfig(filename='podcast.log', format='%(asctime)s %(message)s',  level=logging.DEBUG)
 
 cmn = common.common_functions()
 chatz = chatzinikolaou.chatzinikolaou_functions()

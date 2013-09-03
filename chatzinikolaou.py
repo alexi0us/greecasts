@@ -62,6 +62,7 @@ class chatzinikolaou_functions:
 		#Remove tmp files
 		for filename in sorted(iglob(os.path.join(os.getcwd() + '/tmp/', '*.mp3'))):
 			try:
+				os.chmod(filename, 777)
 				os.remove(filename)
 			except OSError:
 				pass
