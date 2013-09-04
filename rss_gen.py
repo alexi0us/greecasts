@@ -41,7 +41,7 @@ class RssGenerator:
 		    # the url where the podcast items will be hosted
 		    rssSiteURL = "https://www.real.gr"
 		    # the url of the folder where the items will be stored
-		    rssItemURL = "http://ec2-54-217-81-147.eu-west-1.compute.amazonaws.com/chatzinikolaou"
+		    rssItemURL = "http://54.217.239.144/chatzinikolaou"
 		    # the url to the podcast html file
 		    rssLink = rssSiteURL + '/DefaultArthro.aspx?Page=category&amp;catID=64'
 		    # url to the podcast image
