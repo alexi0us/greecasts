@@ -10,7 +10,13 @@ Alexis
 Backlog
 -----------
 i) Logging in all files for easy debugging
+
 ii) Keep only the last 10 programs to save some disk space
+
 iii) Investigate if more items can be moved under common functions
-iv)rss_gen.py should be generic for all podcasts. Remove references for current podcasts
+
+iv)rss_gen.py should be generic for all podcasts. Remove references for current podcasts.
+
 iv) Start working on ellinofreneia
+
+vi)Add itunes fields like description etc
