@@ -19,7 +19,7 @@ class RssGenerator:
 
 	# format date method
 	def formatDate(self,dt):
-	    return dt.strftime("%a, %d %b %Y %H:%M:%S +0000")
+	    return dt.strftime("%a, %d %b %Y %H:%M:%S GMT")
 
 	# get the item/@type based on file extension
 	def getItemType(self,fileExtension):
