@@ -51,3 +51,9 @@ class common_functions:
 		    print status,
 		f.close()
 		return True	
+
+	def ensure_directory_structure(self, name):
+		if not os.path.exists('tmp'):
+		    os.makedirs('tmp')
+		if not os.path.exists(name):
+			os.makedirs(name)

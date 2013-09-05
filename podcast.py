@@ -15,7 +15,7 @@ chatz = chatzinikolaou.chatzinikolaou_functions()
 url_chatz = cmn.config_section_map("chatzinikolaou")['url_chatz']
 
 if chatz.chatz_is_file_downloaded() == False:
-	chatz.ensure_directory_structure()
+	cmn.ensure_directory_structure('chatzinikolaou')
 	main_page_html = cmn.get_html_and_split_lines(url_chatz)
 	chatz_download_url = chatz.find_actual_download_url(main_page_html)
 	download_page_html = cmn.get_html_and_split_lines(chatz_download_url)
