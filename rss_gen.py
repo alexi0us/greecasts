@@ -52,7 +52,7 @@ class RssGenerator:
 		    rssWebMaster = "greecast@ymail.com"
 		    #record datetime started
 		    now = datetime.datetime.now()
-		    rootdir = self.base_directory + "chatzinikolaou"
+		    rootdir = self.base_directory + name + "/tmp"
 		    outputFilename = self.base_directory + "chatzinikolaou/chatzinikolaou.xml"
  		else:
  			print "An error occured. No xml feed was created"

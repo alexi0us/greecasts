@@ -20,7 +20,7 @@ def main():
 		main_page_html = cmn.get_html_and_split_lines(url_chatz)
 		chatz_download_url = chatz.find_actual_download_url(main_page_html)
 		download_page_html = cmn.get_html_and_split_lines(chatz_download_url)
-		cmn.download_all_available_files(download_page_html)
+		cmn.download_all_available_files(download_page_html,'chatzinikolaou')
 		cmn.concat_files_and_move("chatzinikolaou")
 		rssgen = rss_gen.RssGenerator()
 		rssgen.createxml("chatzinikolaou")

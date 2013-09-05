@@ -39,9 +39,9 @@ class common_functions:
 				dict1[option] = None
 		return dict1
 	
-	def download_file(self,url,file_name):
+	def download_file(self,url,program,file_name):
 		u = urllib2.urlopen(url)
-		f = open(os.getcwd() + '/tmp/'+file_name, 'wb')
+		f = open(os.getcwd() + '/'+ program + '/tmp/'+file_name, 'wb')
 		meta = u.info()
 		file_size = int(meta.getheaders("Content-Length")[0])
 		logging.info('Start downloading %s', file_name )
@@ -63,13 +63,11 @@ class common_functions:
 
 	def ensure_directory_structure(self, name):
 		logging.info('Checking directory structure for %s', name )
-		if not os.path.exists('tmp'):
-		    os.makedirs('tmp')
-		if not os.path.exists(name):
-			os.makedirs(name)
+		if not os.path.exists(name + '/tmp'):
+			os.makedirs(name + '/tmp')
 		logging.info('Directory structure checked for %s', name)
 
-	def download_all_available_files(self,html_download_lines):
+	def download_all_available_files(self,html_download_lines,program):
 		for line in html_download_lines:
 			if "mp3" in line and "audiofile" in line:
 				url_proc = line.split("\"")
@@ -77,7 +75,7 @@ class common_functions:
 				#print url_proc
 				filename = url_proc[0][:-11].decode('utf-8')
 				filename = filename[11:].replace(' ', '') + ".mp3"
-				self.download_file(url,filename)
+				self.download_file(url,program,filename)
 
 	def concat_files_and_move(self,name):
 		complete_audio_file = name + '_' + self.now.strftime("%d%m%Y")+'.mp3'
@@ -90,7 +88,7 @@ class common_functions:
 			shutil.copyfileobj(open(filename, 'rb'), destination)
 		destination.close()
 		#Remove tmp files
-		for filename in sorted(iglob(os.path.join(os.getcwd() + '/tmp/', '*.mp3'))):
+		for filename in sorted(iglob(os.path.join(os.getcwd() + '/' +name +  '/tmp/', '*.mp3'))):
 			try:
 				logging.info('Removing tmp file %s', filename)
 				os.chmod(filename, 777)
