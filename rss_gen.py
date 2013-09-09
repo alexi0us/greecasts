@@ -8,6 +8,7 @@ import common
 import shutil
 import datetime
 from mutagen.mp3 import MP3
+from glob import iglob
 
 # import constants from stat library
 from stat import * # ST_SIZE ST_MTIME
@@ -52,7 +53,7 @@ class RssGenerator:
 		    rssWebMaster = "greecast@ymail.com"
 		    #record datetime started
 		    now = datetime.datetime.now()
-		    rootdir = self.base_directory + name + "/tmp"
+		    rootdir = self.base_directory + name
 		    outputFilename = self.base_directory + "chatzinikolaou/chatzinikolaou.xml"
  		else:
  			print "An error occured. No xml feed was created"
@@ -81,37 +82,39 @@ class RssGenerator:
 
 
 		# walk through all files and subfolders 
-		for path, subFolders, files in os.walk(rootdir):
-    
-		    for file in files:
- 
-		        # split the file based on "." we use the first part as the title and the extension to work out the media type
-		        fileNameBits = file.split(".")
-			if fileNameBits[1] != "xml":
-		            # get the full path of the file
-		            fullPath = os.path.join(path, file)
-		            # get the stats for the file
-		            fileStat = os.stat(fullPath)
-		            # find the path relative to the starting folder, e.g. /subFolder/file
-		            relativePath = fullPath[len(rootdir):]
-			    audio = MP3(fullPath)
-			    duration = datetime.timedelta(seconds=audio.info.length)
-			    audio_length = ':'.join(str(duration).split(':')[:2])
-			    print audio_length
+		#for path, dirs, files in os.walk(rootdir):
+			#for file in files:
+		for file in sorted(iglob(os.path.join(os.getcwd() + '/' + name , '*.mp3'))):	
+			print file
+	        # split the file based on "." we use the first part as the title and the extension to work out the media type
+	        fileNameBits = file.split(".")
+	        if fileNameBits[1] != "xml":
+	            # get the full path of the file
+	            path = os.path.join(os.getcwd() + '/' + name)
+	            fullPath = os.path.join(path, file)
+	            print "fullpath" +fullPath
+	            # get the stats for the file
+	            fileStat = os.stat(fullPath)
+	            # find the path relative to the starting folder, e.g. /subFolder/file
+	            relativePath = fullPath[len(rootdir):]
+	            audio = MP3(fullPath)
+	            duration = datetime.timedelta(seconds=audio.info.length)
+	            audio_length = ':'.join(str(duration).split(':')[:2])
+	            print audio_length
 
-		            # write rss item
-		            outputFile.write("<item>\n")
-		            outputFile.write("<title>" + fileNameBits[0][15:17] \
-		            	+ "/" + fileNameBits[0][17:19]\
-						+ "/" + fileNameBits[0][21:23]
-		            	+ " Η εκπομπή του Νίκου Χατζηνικολάου"+ "</title>\n")
-		            outputFile.write("<description>" +"Νίκος Χατζηνικολάου"+"</description>\n")
-		            outputFile.write("<link>" + rssItemURL + relativePath + "</link>\n")
-		            outputFile.write("<guid>" + rssItemURL + relativePath + "</guid>\n")
-		            outputFile.write("<pubDate>" + self.formatDate(datetime.datetime.fromtimestamp(fileStat[ST_MTIME])) + "</pubDate>\n")
-			    outputFile.write("<duration>" + audio_length + "</duration>\n")
-			    outputFile.write("<enclosure url=\"" + rssItemURL + relativePath + "\" length=\"" + str(fileStat[ST_SIZE]) + "\" type=\"" + self.getItemType(fileNameBits[len(fileNameBits)-1]) + "\" />\n")
-		            outputFile.write("</item>\n")
+	            # write rss item
+	            outputFile.write("<item>\n")
+	            outputFile.write("<title>" + fileNameBits[0][15:17] \
+	            	+ "/" + fileNameBits[0][17:19]\
+					+ "/" + fileNameBits[0][21:23]
+	            	+ " Η εκπομπή του Νίκου Χατζηνικολάου"+ "</title>\n")
+	            outputFile.write("<description>" +"Νίκος Χατζηνικολάου"+"</description>\n")
+	            outputFile.write("<link>" + rssItemURL + relativePath + "</link>\n")
+	            outputFile.write("<guid>" + rssItemURL + relativePath + "</guid>\n")
+	            outputFile.write("<pubDate>" + self.formatDate(datetime.datetime.fromtimestamp(fileStat[ST_MTIME])) + "</pubDate>\n")
+	            outputFile.write("<duration>" + audio_length + "</duration>\n")
+	            outputFile.write("<enclosure url=\"" + rssItemURL + relativePath + "\" length=\"" + str(fileStat[ST_SIZE]) + "\" type=\"" + self.getItemType(fileNameBits[len(fileNameBits)-1]) + "\" />\n")
+	            outputFile.write("</item>\n")
         
 		# write rss footer
 		outputFile.write("</channel>\n")

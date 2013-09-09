@@ -82,7 +82,7 @@ class common_functions:
 		path_complete_audio_file = os.getcwd() + '/'+ name +'/' + complete_audio_file
 		logging.info('Scanning tmp folder for available files')
 		destination = open(path_complete_audio_file , 'wb')
-		for filename in sorted(iglob(os.path.join(os.getcwd() + '/tmp/', '*.mp3'))):
+		for filename in sorted(iglob(os.path.join(os.getcwd() + '/' +name + '/tmp/', '*.mp3'))):
 			file_concat = filename.split("/")
 			logging.info('Concatenating file %s',file_concat[-1])
 			shutil.copyfileobj(open(filename, 'rb'), destination)
