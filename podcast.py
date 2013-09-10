@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import rss_gen
-#import ConfigParser
 import common
 import chatzinikolaou
 import logging
@@ -13,7 +12,6 @@ def main():
 
     cmn = common.common_functions()
     chatz = chatzinikolaou.chatzinikolaou_functions()
-
     url_chatz = cmn.config_section_map("chatzinikolaou")['url_chatz']
 
     if chatz.chatz_is_file_downloaded() == False:
