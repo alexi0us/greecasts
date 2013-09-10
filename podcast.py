@@ -8,7 +8,7 @@ import logging
 
 
 def main():
-	logging.basicConfig(filename='podcast.log', format='%(asctime)s %(message)s',  level=logging.DEBUG)
+	logging.basicConfig(filename='podcast.log', format='%(asctime)s %(message)s',  level=logging.INFO)
 
 	cmn = common.common_functions()
 	chatz = chatzinikolaou.chatzinikolaou_functions()
