@@ -17,3 +17,5 @@ ii)rss_gen.py should be generic for all podcasts. Remove references for current 
 iii) Start working on ellinofreneia
 
 iv)Add itunes fields like description etc
+
+vi)Check that size of the files is not zero
