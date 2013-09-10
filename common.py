@@ -8,6 +8,8 @@ import shutil
 import ConfigParser
 import urllib2
 import logging
+import sys
+from mutagen.mp3 import MP3
 from glob import iglob
 
 
@@ -124,3 +126,15 @@ class common_functions:
                 os.remove(filename)
             except OSError:
                 pass
+
+    def get_podcast_duration(self, fileName):
+        logging.debug("Calculating mp3 duration for %s", fileName)
+        audio = MP3(fileName)
+        duration = datetime.timedelta(seconds = audio.info.length)
+        audio_length = ':'.join(str(duration).split(':')[:2])
+        if audio_length:
+            return audio_length
+        else:
+            logging.error("Something went wrong. Podcast has duration 0")
+            logging.info("Exiting")
+            sys.exit()

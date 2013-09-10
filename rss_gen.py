@@ -2,7 +2,6 @@
 import os
 import common
 import datetime
-from mutagen.mp3 import MP3
 import logging
 # import constants from stat library
 from stat import  ST_SIZE, ST_MTIME
@@ -101,9 +100,7 @@ class RssGenerator:
                     fileStat = os.stat(fullPath)
                     # find the path relative to the starting folder, e.g. /subFolder/file
                     relativePath = fullPath[len(rootdir):]
-                    audio = MP3(fullPath)
-                    duration = datetime.timedelta(seconds = audio.info.length)
-                    audio_length = ':'.join(str(duration).split(':')[:2])
+                    audio_length = self.cmn.get_podcast_duration(fullPath)
                     logging.info("Duration for %s is %s",\
                                   fileName, audio_length)
 
