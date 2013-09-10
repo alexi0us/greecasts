@@ -3,7 +3,6 @@ import os
 import common
 import datetime
 import logging
-# import constants from stat library
 from stat import  ST_SIZE, ST_MTIME
 
 
@@ -12,7 +11,9 @@ class RssGenerator:
     cmn = common.common_functions()
     base_directory = cmn.config_section_map("home")['base_dir']
 
-    # format date method
+    def __init__(self):
+        self.cmn = common.common_functions()
+
     def formatDate(self, dt):
         """
         Returns the date in correct format for podcast
@@ -37,32 +38,24 @@ class RssGenerator:
         """
         Currently chatzinikolaou only - hardcoded. (Needs to be generic)
         """
+        chatz_dic = self.cmn.config_section_map(name)
         if name == 'chatzinikolaou':
-            rssTitle_tmp = u'Realfm - Νίκος Χατζηνικολάου'
-            rssTitle = rssTitle_tmp.encode('utf-8')
-            rssDescription = 'Οι καθημερινές εκπομπές του Ν.Χατζηνικολάου'\
-                              + ' στον realfm'
-            # the url where the podcast items will be hosted
-            rssSiteURL = "https://www.real.gr"
-            # the url of the folder where the items will be stored
-            rssItemURL = "http://54.217.239.144/chatzinikolaou"
-            # the url to the podcast html file
-            rssLink = rssSiteURL + \
-                        '/DefaultArthro.aspx?Page=category&amp;catID=64'
-            # url to the podcast image
-            rssImageUrl = "http://www.real.gr/Files/Articles/"\
-                            + "Photo/250_140_5128.jpg"
-            # the time to live (in minutes)
+#            rssTitle_tmp = u'Realfm - Νίκος Χατζηνικολάου'
+            rssTitle = chatz_dic['rss_title']
+#            rssTitle = rssTitle_tmp.encode('utf-8')
+
+            rssDescription = chatz_dic['rss_description']
+            rssSiteURL = chatz_dic['base_url']
+            rssItemURL = chatz_dic['podcast_dir_url']
+            rssLink = rssSiteURL + chatz_dic['podcast_location']
+            rssImageUrl = chatz_dic['image_url']
             rssTtl = "60"
-            # contact details of the web master
             rssWebMaster = "greecast@ymail.com"
-            #record datetime started
             now = datetime.datetime.now()
             rootdir = self.base_directory + name
-            outputFilename = self.base_directory + \
-                                         "chatzinikolaou/chatzinikolaou.xml"
+            outputFilename = self.base_directory + chatz_dic['xml_file']
         else:
-            logging.error("An error occured. No xml feed was created")
+            logging.error("An error occurred. No xml feed was created")
 
         print "Updating : " + outputFilename
 
@@ -101,7 +94,7 @@ class RssGenerator:
                     # find the path relative to the starting folder, e.g. /subFolder/file
                     relativePath = fullPath[len(rootdir):]
                     audio_length = self.cmn.get_podcast_duration(fullPath)
-                    logging.info("Duration for %s is %s",\
+                    logging.info("Duration for %s is %s", \
                                   fileName, audio_length)
 
                     # write rss item
