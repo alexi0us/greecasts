@@ -79,48 +79,43 @@ class RssGenerator:
 		outputFile.write("<lastBuildDate>" + self.formatDate(now) + "</lastBuildDate>\n")
 		outputFile.write("<pubDate>" + self.formatDate(now) + "</pubDate>\n")
 		outputFile.write("<webMaster>" + rssWebMaster + "</webMaster>\n")
+		
+		for file in os.listdir(self.base_directory + "chatzinikolaou"):
+			print "file: " + file
+			fileNameBits = file.split(".")
+			print fileNameBits
+			print "len: "+ str(len(fileNameBits))
+			if len(fileNameBits) == 2:
+				if fileNameBits[1] != "xml":
+					path = os.path.join(os.getcwd() + '/' + name)
+					fullPath = os.path.join(path, file)
+					print "fullpath" + fullPath
+					# get the stats for the file
+					fileStat = os.stat(fullPath)
+					# find the path relative to the starting folder, e.g. /subFolder/file
+					relativePath = fullPath[len(rootdir):]
+					audio = MP3(fullPath)
+					duration = datetime.timedelta(seconds = audio.info.length)
+					audio_length = ':'.join(str(duration).split(':')[:2])
+					print audio_length
+
+					# write rss item
+					outputFile.write("<item>\n")
+					outputFile.write("<title>" + fileNameBits[0][15:17] \
+						+ "/" + fileNameBits[0][17:19]\
+						+ "/" + fileNameBits[0][21:23]
+						+ " Η εκπομπή του Νίκου Χατζηνικολάου"+ "</title>\n")
+					outputFile.write("<description>" +"Νίκος Χατζηνικολάου"+"</description>\n")
+					outputFile.write("<link>" + rssItemURL + relativePath + "</link>\n")
+					outputFile.write("<guid>" + rssItemURL + relativePath + "</guid>\n")
+					outputFile.write("<pubDate>" + self.formatDate(datetime.datetime.fromtimestamp(fileStat[ST_MTIME])) + "</pubDate>\n")
+					outputFile.write("<duration>" + audio_length + "</duration>\n")
+					outputFile.write("<enclosure url=\"" + rssItemURL + relativePath + "\" length=\"" + str(fileStat[ST_SIZE]) + "\" type=\"" + self.getItemType(fileNameBits[len(fileNameBits)-1]) + "\" />\n")
+					outputFile.write("</item>\n")
 
 
-		# walk through all files and subfolders 
-		#for path, dirs, files in os.walk(rootdir):
-			#for file in files:
-		for file in sorted(iglob(os.path.join(os.getcwd() + '/' + name , '*.mp3'))):	
-			print file
-	        # split the file based on "." we use the first part as the title and the extension to work out the media type
-	        fileNameBits = file.split(".")
-	        if fileNameBits[1] != "xml":
-	            # get the full path of the file
-	            path = os.path.join(os.getcwd() + '/' + name)
-	            fullPath = os.path.join(path, file)
-	            print "fullpath" +fullPath
-	            # get the stats for the file
-	            fileStat = os.stat(fullPath)
-	            # find the path relative to the starting folder, e.g. /subFolder/file
-	            relativePath = fullPath[len(rootdir):]
-	            audio = MP3(fullPath)
-	            duration = datetime.timedelta(seconds=audio.info.length)
-	            audio_length = ':'.join(str(duration).split(':')[:2])
-	            print audio_length
-
-	            # write rss item
-	            outputFile.write("<item>\n")
-	            outputFile.write("<title>" + fileNameBits[0][15:17] \
-	            	+ "/" + fileNameBits[0][17:19]\
-					+ "/" + fileNameBits[0][21:23]
-	            	+ " Η εκπομπή του Νίκου Χατζηνικολάου"+ "</title>\n")
-	            outputFile.write("<description>" +"Νίκος Χατζηνικολάου"+"</description>\n")
-	            outputFile.write("<link>" + rssItemURL + relativePath + "</link>\n")
-	            outputFile.write("<guid>" + rssItemURL + relativePath + "</guid>\n")
-	            outputFile.write("<pubDate>" + self.formatDate(datetime.datetime.fromtimestamp(fileStat[ST_MTIME])) + "</pubDate>\n")
-	            outputFile.write("<duration>" + audio_length + "</duration>\n")
-	            outputFile.write("<enclosure url=\"" + rssItemURL + relativePath + "\" length=\"" + str(fileStat[ST_SIZE]) + "\" type=\"" + self.getItemType(fileNameBits[len(fileNameBits)-1]) + "\" />\n")
-	            outputFile.write("</item>\n")
-        
-		# write rss footer
 		outputFile.write("</channel>\n")
 		outputFile.write("</rss>")
 		outputFile.close()
 		#shutil.copyfile(outputFilename , "chatzinikolaou.xml")
 		print "complete"
-
-
