@@ -23,12 +23,12 @@ class chatzinikolaou_functions:
                     logging.info('File with name %s already exists.', \
                                   complete_audio_file)
                     flag = True
-                return flag
+        return flag
 
     def find_actual_download_url(self, html_lines):
         download_page = 'empty'
         for line in html_lines:
-            if self.now.strftime("%d/%m/%Y") in line or "09/09/2013" in line:
+            if self.now.strftime("%d/%m/%Y") in line or "10/09/2013" in line:
                 logging.debug(line)
                 logging.info('A podcast found for %s', \
                              self.now.strftime("%d-%m-%Y"))
@@ -44,4 +44,4 @@ class chatzinikolaou_functions:
             logging.info("Exiting")
             sys.exit()
         else:
-            return self.base_url + download_page
+            return self.base_url + '/' +download_page
