@@ -27,6 +27,8 @@ class common_functions:
         req = urllib2.Request(url, headers={'User-Agent': "Mozilla/5.0'\
         +' (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.17'\
         +' (KHTML, like Gecko) Chrome/24.0.1309.0 Safari/537.17"})
+        logging.debug("Request header %s" + req.header_items())
+        logging.debug("Request url: %s" + req.get_full_url())
         url_content = urllib2.urlopen(req)
         raw_html = url_content.read()
         html_lines = raw_html.split('\n')
