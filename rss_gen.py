@@ -54,6 +54,8 @@ class RssGenerator:
             now = datetime.datetime.now()
             rootdir = self.base_directory + name
             outputFilename = self.base_directory + chatz_dic['xml_file']
+            episode_title = chatz_dic['episode_title']
+            episode_desc = chatz_dic['episode_desc']
         else:
             logging.error("An error occurred. No xml feed was created")
 
@@ -102,8 +104,8 @@ class RssGenerator:
                     outputFile.write("<title>" + fileNameBits[0][15:17] \
                         + "/" + fileNameBits[0][17:19]\
                         + "/" + fileNameBits[0][21:23]
-                        + " Η εκπομπή του Νίκου Χατζηνικολάου" + "</title>\n")
-                    outputFile.write("<description>" + "Νίκος Χατζηνικολάου"\
+                        + " " + episode_title + "</title>\n")
+                    outputFile.write("<description>" + episode_desc\
                                       + "</description>\n")
                     outputFile.write("<link>" + rssItemURL + relativePath\
                                       + "</link>\n")
