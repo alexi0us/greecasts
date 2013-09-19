@@ -99,8 +99,8 @@ class common_functions:
             if "mp3" in line and "audiofile" in line:
                 url_proc = line.split("\"")
                 if program == 'ellinofreneia':
-                    url = url_proc[3]
-                    filename = url_proc[4][1:12].decode('utf-8')
+                    url = url_proc[1]
+                    filename = url_proc[2][1:13].decode('utf-8')
                     print filename
                     filename = filename.replace(' ', '') + ".mp3"
                 elif program == 'chatzinikolaou':
