@@ -101,7 +101,7 @@ class common_functions:
                 if program == 'ellinofreneia':
                     url = url_proc[1]
                     filename = url_proc[2][1:13].decode('utf-8')
-                    print filename
+                    #print filename
                     filename = filename.replace(' ', '') + ".mp3"
                 elif program == 'chatzinikolaou':
                     url = url_proc[3]
