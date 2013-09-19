@@ -36,28 +36,24 @@ class RssGenerator:
 
     def createxml(self, name):
         """
-        Currently chatzinikolaou only - hardcoded. (Needs to be generic)
+        Function for generating the xml podcast file
         """
-        chatz_dic = self.cmn.config_section_map(name)
-        if name == 'chatzinikolaou':
-#            rssTitle_tmp = u'Realfm - Νίκος Χατζηνικολάου'
-            rssTitle = chatz_dic['rss_title']
-#            rssTitle = rssTitle_tmp.encode('utf-8')
+        xml_dict = self.cmn.config_section_map(name)
 
-            rssDescription = chatz_dic['rss_description']
-            rssSiteURL = chatz_dic['base_url']
-            rssItemURL = chatz_dic['podcast_dir_url']
-            rssLink = rssSiteURL + chatz_dic['podcast_location']
-            rssImageUrl = chatz_dic['image_url']
-            rssTtl = "60"
-            rssWebMaster = "greecast@ymail.com"
-            now = datetime.datetime.now()
-            rootdir = self.base_directory + name
-            outputFilename = self.base_directory + chatz_dic['xml_file']
-            episode_title = chatz_dic['episode_title']
-            episode_desc = chatz_dic['episode_desc']
-        else:
-            logging.error("An error occurred. No xml feed was created")
+        rssTitle = xml_dict['rss_title']
+
+        rssDescription = xml_dict['rss_description']
+        rssSiteURL = xml_dict['base_url']
+        rssItemURL = xml_dict['podcast_dir_url']
+        rssLink = rssSiteURL + xml_dict['podcast_location']
+        rssImageUrl = xml_dict['image_url']
+        rssTtl = "60"
+        rssWebMaster = "greecast@ymail.com"
+        now = datetime.datetime.now()
+        rootdir = self.base_directory + name
+        outputFilename = self.base_directory + xml_dict['xml_file']
+        episode_title = xml_dict['episode_title']
+        episode_desc = xml_dict['episode_desc']
 
         print "Updating : " + outputFilename
 
@@ -81,7 +77,7 @@ class RssGenerator:
         outputFile.write("<pubDate>" + self.formatDate(now) + "</pubDate>\n")
         outputFile.write("<webMaster>" + rssWebMaster + "</webMaster>\n")
 
-        for fileName in os.listdir(self.base_directory + "chatzinikolaou"):
+        for fileName in os.listdir(self.base_directory + name):
             logging.debug("fileName: " + fileName)
             fileNameBits = fileName.split(".")
             logging.debug(fileNameBits)
@@ -128,6 +124,5 @@ class RssGenerator:
         outputFile.write("</channel>\n")
         outputFile.write("</rss>")
         outputFile.close()
-        #shutil.copyfile(outputFilename , "chatzinikolaou.xml")
         print "Operation completed"
         logging.info("Podacast xml updated.")

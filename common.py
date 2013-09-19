@@ -95,12 +95,21 @@ class common_functions:
         each one of them
         """
         for line in html_download_lines:
+            logging.debug("File for download: %s" + line)
             if "mp3" in line and "audiofile" in line:
                 url_proc = line.split("\"")
-                url = url_proc[3]
-                #loggging.debbug(url_proc)
-                filename = url_proc[0][:-11].decode('utf-8')
-                filename = filename[11:].replace(' ', '') + ".mp3"
+                if program == 'ellinofreneia':
+                    url = url_proc[3]
+                    filename = url_proc[4][1:12].decode('utf-8')
+                    print filename
+                    filename = filename.replace(' ', '') + ".mp3"
+                elif program == 'chatzinikolaou':
+                    url = url_proc[3]
+                    filename = url_proc[0][:-11].decode('utf-8')
+                    filename = filename[11:].replace(' ', '') + ".mp3"
+                else:
+                    logging.error("Not a known program. Exiting")
+                    sys.exit()
                 self.download_file(url, program, filename)
 
     def concat_files_and_move(self, name):
