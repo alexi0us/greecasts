@@ -94,12 +94,12 @@ class RssGenerator:
                     audio_length = self.cmn.get_podcast_duration(fullPath)
                     logging.info("Duration for %s is %s", \
                                   fileName, audio_length)
-
+                    filedate = fileNameBits[0].split("_")
                     # write rss item
                     outputFile.write("<item>\n")
-                    outputFile.write("<title>" + fileNameBits[0][15:17] \
-                        + "/" + fileNameBits[0][17:19]\
-                        + "/" + fileNameBits[0][21:23]
+                    outputFile.write("<title>" + filedate[1][0:2] \
+                        + "/" + filedate[1][2:4]\
+                        + "/" + filedate[1][6:8]
                         + " " + episode_title + "</title>\n")
                     outputFile.write("<description>" + episode_desc\
                                       + "</description>\n")
