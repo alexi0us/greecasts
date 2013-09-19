@@ -62,7 +62,7 @@ class common_functions:
         meta = u.info()
         file_size = int(meta.getheaders("Content-Length")[0])
         logging.info('Start downloading %s', file_name)
-        print "Downloading: %s Bytes: %s" % (file_name, file_size)
+        #print "Downloading: %s Bytes: %s" % (file_name, file_size)
         file_size_dl = 0
         block_sz = 8192
         while True:
